@@ -8,27 +8,63 @@ class ServiceUser:
         self.store = Store()
 
     def add_user(self, name, job):
-        if name != None or job != None:
-            user = User(name, job)
-            for item_user in self.store.bd:
-                if item_user.name == user.name:
-                    return "Nome já existe"
-            self.store.bd.append(user)
-            return "Usuario adicionado"
+        if name != None and job != None:
+            if isinstance(name, str) and isinstance(job, str):
+                user_bd = self.find_user(name)
+                if user_bd == None:
+                    user = User(name=name, job=job)
+                    self.store.bd.append(user)
+                    return "Usuario adicionado"
+                else:
+                    return 'Usuario ja existe'
+            else:
+                return "Usuario invalido"
         else:
-            return "Usuario Inválido"
+            return "Usuario invalido"
 
-    def remove_user(self, user):
-        for item_user in self.store.bd:
-            if item_user.name == user:
-                item_removido = item_user
-        if item_removido != None:
-            self.store.bd.remove(item_removido)
-            return "removendo usuario"
+    def remove_user(self, name, job):
+        if name != None and job != None:
+            if isinstance(name, str) and isinstance(job, str):
+                user_bd = self.find_user(name)
+                if user_bd != None:
+                    self.store.bd.remove(user_bd)
+                    return "Usuario removido"
+                else:
+                    return 'Usuario não existe'
+            else:
+                return "Usuario invalidd"
         else:
-            return "usuario não existe"
+            return "Usuario invalidd"
 
-    def lista_user(self):
-        print("print lista user")
-        for item_user in self.store.bd:
-            print(item_user.name)
+    def find_user(self, name):
+        for user in self.store.bd:
+            if user.name == name:
+                return user
+        return None
+
+
+    def update_user(self, name, job):
+        if name != None and job != None:
+            if isinstance(name, str) and isinstance(job, str):
+                user_bd = self.find_user(name)
+                if user_bd != None:
+                    for index, item_user in enumerate(self.store.bd):
+                        updated_user = User(item_user.name, job)
+                        self.store.bd[index] = updated_user
+                        return 'Usuario atualizado'
+
+                else:
+                    return 'Usuario não encontrado'
+
+
+    def get_user_by_name(self, name):
+        if name != None:
+            if isinstance(name, str):
+                user_bd = self.find_user(name)
+                for index, item_user in enumerate(self.store.bd):
+                    return self.store.bd[index]
+                else:
+                    return 'Usuario não encontrado'
+
+    def list_all_users(self):
+        return self.store.bd
