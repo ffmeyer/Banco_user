@@ -1,15 +1,33 @@
 import unittest
+
+from parameterized import parameterized
+from unittest.mock import patch
+
 from src.service.service_user import ServiceUser
+
+# os testes pametrizados só executam em uma classe deles, entao separei dos demais
+class TestParametherized_tests(unittest.TestCase):
+    @parameterized.expand([
+        (None, None, 'Usuario invalido'),
+        (None, 'qa', 'Usuario invalido'),
+        ('zezinho', None, 'Usuario invalido'),
+        (1, 'qa', 'Usuario invalido'),
+        ('zezinho', -1, 'Usuario invalido'),
+        (-1.1, 'qa', 'Usuario invalido'),
+        ('zezinho', 1.1, 'Usuario invalido'),
+        ({}, 'qa', 'Usuario invalido'),
+        ('zezinho', {}, 'Usuario invalido'),
+        (True, 'qa', 'Usuario invalido'),
+        ('zezinho', False, 'Usuario invalido')
+    ])
+    def test_invalid_input_parametherized(self, name, job, expected_result):
+        service = ServiceUser()
+        resposta = service.add_user(name, job)
+        # user_invalid = 'Usuario invalido'
+        self.assertEqual(resposta, expected_result)
 
 
 class TestServiceUser(unittest.TestCase):
-
-    def test_user_invalid(self):
-        service = ServiceUser()
-        resposta = service.add_user(None, None)
-        user_invalid = 'Usuario invalido'
-        self.assertEqual(resposta, user_invalid)
-
     def test_add_user(self):
         service = ServiceUser()
         resposta = service.add_user('Fabricio', 'Eng')
@@ -73,3 +91,4 @@ class TestServiceUser(unittest.TestCase):
         response = service.list_all_users()
         qtd_itens_list = 2
         assert len(response) == qtd_itens_list
+

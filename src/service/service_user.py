@@ -8,10 +8,10 @@ class ServiceUser:
         self.store = Store()
 
     def add_user(self, name, job):
-        if name != None and job != None:
+        if name is not None and job is not None:
             if isinstance(name, str) and isinstance(job, str):
                 user_bd = self.find_user(name)
-                if user_bd == None:
+                if user_bd is None:
                     user = User(name=name, job=job)
                     self.store.bd.append(user)
                     return "Usuario adicionado"
@@ -42,9 +42,8 @@ class ServiceUser:
                 return user
         return None
 
-
     def update_user(self, name, job):
-        if name != None and job != None:
+        if name is not None and job is not None:
             if isinstance(name, str) and isinstance(job, str):
                 user_bd = self.find_user(name)
                 if user_bd != None:
@@ -56,9 +55,8 @@ class ServiceUser:
                 else:
                     return 'Usuario não encontrado'
 
-
     def get_user_by_name(self, name):
-        if name != None:
+        if name is not None:
             if isinstance(name, str):
                 user_bd = self.find_user(name)
                 for index, item_user in enumerate(self.store.bd):
